@@ -13,15 +13,6 @@ class App extends Component {
       { key: "id-4", name: "Annie Copeland", number: "227-91-26" },
     ],
     filter: "",
-    name: "",
-    number: "",
-  };
-
-  handleChange = (e) => {
-    const { name, value } = e.currentTarget;
-    this.setState({
-      [name]: value,
-    });
   };
 
   handleFilter = (e) => {
@@ -31,16 +22,8 @@ class App extends Component {
     });
   };
 
-  resetState = () => {
-    this.setState({
-      name: "",
-      number: "",
-    });
-  };
-
-  handleAddContact = () => {
-    this.resetState();
-    const { contacts, name, number } = this.state;
+  handleAddContact = (name, number) => {
+    const { contacts } = this.state;
     if (
       contacts.find((contact) => {
         return contact.name === name || contact.number === number;
@@ -64,13 +47,15 @@ class App extends Component {
   };
 
   handleDeleteContact = (contactId) => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.key!==contactId)
-    }))
-  }
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter(
+        (contact) => contact.key !== contactId
+      ),
+    }));
+  };
 
   render() {
-    const { name, number, contacts, filter } = this.state;
+    const { contacts, filter } = this.state;
     const normalizeFilter = filter.toLowerCase();
 
     const foundContacts = contacts.filter((contact) => {
@@ -79,16 +64,14 @@ class App extends Component {
 
     return (
       <div className="App">
-         <h1>Phonebook</h1>
-        <Form
-          name={name}
-          number={number}
-          handleChange={this.handleChange}
-          handleAddContact={this.handleAddContact}
+        <h1>Phonebook</h1>
+        <Form onClick={this.handleAddContact} />
+        <h2 className="contact_title">Contacts</h2>
+        <Filter filter={filter} handleFilter={this.handleFilter} />
+        <ContactList
+          contacts={foundContacts}
+          handleDeleteContact={this.handleDeleteContact}
         />
-          <h2 className="contact_title">Contacts</h2>
-          <Filter filter={filter} handleFilter={this.handleFilter} />
-          <ContactList contacts={foundContacts} handleDeleteContact= {this.handleDeleteContact} />
       </div>
     );
   }
