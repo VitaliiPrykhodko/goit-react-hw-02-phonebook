@@ -71,7 +71,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Form;
